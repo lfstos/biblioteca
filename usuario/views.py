@@ -66,3 +66,4 @@ def valida_login(request):
 def sair(request):
     logout(request)
     return redirect('/auth/login/')
+
