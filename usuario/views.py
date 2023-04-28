@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from django.contrib.auth import authenticate, logout, login as login_django
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -7,6 +8,7 @@ from .models import User
 from django.http import HttpResponse
 
 # Create your views here.
+
 
 
 # @login_required(login_url='/auth/login/')
@@ -18,6 +20,9 @@ def login(request):
 def cadastro(request):
     status = request.GET.get('status')
     return render(request, 'cadastro.html', {'status': status})
+
+def login(request):
+    return HttpResponse('login')
 
 
 def valida_cadastro(request):
@@ -66,4 +71,3 @@ def valida_login(request):
 def sair(request):
     logout(request)
     return redirect('/auth/login/')
-
