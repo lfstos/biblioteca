@@ -12,7 +12,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Biblioteca</a>
                 {% if request.session.session_key is not None %}
-                    <a href="{% url 'sair' %}">Sair</a>
+                    <a class="btn btn-danger" href="{% url 'sair' %}">Sair</a>
                 {% endif %}
             </div>
         </nav>
