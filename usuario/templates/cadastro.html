@@ -5,6 +5,31 @@
 {% block 'content' %}
 <div class="container">
     <br>
+    {% if status  == '0' %}
+        <div class="alert alert-success" role="alert">
+            <center>Cadastrado realizado com sucesso!</center>
+        </div>
+    {% endif %}
+    {% if status  == '1' %}
+        <div class="alert alert-danger" role="alert">
+            <center>Usuário já existe no sistema!</center>
+        </div>
+    {% endif %}
+    {% if status  == '2' %}
+        <div class="alert alert-danger" role="alert">
+            <center>Nome e Email não podem estar vazios!</center>
+        </div>
+    {% endif %}
+    {% if status  == '3' %}
+        <div class="alert alert-danger" role="alert">
+            <center>Sua senha deve ter pelo menos 8 caracteres!</center>
+        </div>
+    {% endif %}
+    {% if status  == '4' %}
+        <div class="alert alert-danger" role="alert">
+            <center>Erro interno do sistema!</center>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md">
@@ -13,7 +38,7 @@
             <form action="{% url 'valida_cadastro' %}" method="POST">
                 {% csrf_token %}
                 Nome
-                <input name="nome" class="form-control" type="text" placeholder="Nome..." value='{{ nome }}' required="required">
+                <input name="nome" class="form-control" type="text" placeholder="Nome..." required="required">
                 <br>
                 Email
                 <input name="email" class="form-control" type="text" placeholder="Email..." required="required">
@@ -21,7 +46,8 @@
                 Senha
                 <input name="senha" type="password" class="form-control" placeholder="Senha..." required="required">
                 <br>
-                <input type="submit" value="Enviar" class="btn btn-info">
+                <input type="submit" value="Cadastrar" class="btn btn-info btn-lg" >
+                <a href="{% url 'login' %}" class="btn btn-warning btn-lg">Login</a>
             </form>
         </div>
         <div class="col-md-3"></div>
