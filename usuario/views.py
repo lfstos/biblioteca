@@ -10,7 +10,6 @@ from django.http import HttpResponse
 # Create your views here.
 
 
-
 # @login_required(login_url='/auth/login/')
 def login(request):
     status = request.GET.get('status')
@@ -20,9 +19,6 @@ def login(request):
 def cadastro(request):
     status = request.GET.get('status')
     return render(request, 'cadastro.html', {'status': status})
-
-def login(request):
-    return HttpResponse('login')
 
 
 def valida_cadastro(request):
@@ -60,7 +56,6 @@ def valida_login(request):
     senha = request.POST.get('senha')
 
     user = authenticate(request, email=email, password=senha)
-    print(f'user ==> {user}')
     if user is not None:
         login_django(request, user)
         return redirect('home')
