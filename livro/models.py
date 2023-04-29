@@ -1,4 +1,13 @@
 from django.db import models
+from usuario.models import User
+
+
+class Categoria(models.Model):
+    nome = models.CharField(max_length=30)
+    descricao = models.TextField()
+
+    def __str__(self) -> str:
+        return self.nome
 
 
 class Livros(models.Model):
@@ -11,6 +20,8 @@ class Livros(models.Model):
     data_emprestimo = models.DateField(null=True, blank=True)
     deta_devolucao = models.DateField(null=True, blank=True)
     tempo_duracao = models.DateField(null=True, blank=True)
+    categoria = models.ForeignKey(Categoria, on_delete=models.DO_NOTHING)
+    usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     def __str__(self) -> str:
         return self.nome
