@@ -1,9 +1,16 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from .models import Livros
 
-# Create your views here.
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    id = request.user.id
+    livros = Livros.objects.filter(usuario=id)
+    return render(request, 'home.html', {'livros': livros})
+
+
+@login_required
+def ver_livro(request, id):
+    livro = Livros.objects.get(id=id)
+    return render(request, 'ver_livro.html', {'livro': livro})
