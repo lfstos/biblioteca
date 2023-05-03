@@ -12,11 +12,17 @@ from django.http import HttpResponse
 
 # @login_required(login_url='/auth/login/')
 def login(request):
+    id = request.user.id
+    if id:
+        return redirect('home')
     status = request.GET.get('status')
     return render(request, 'login.html', {'status': status})
 
 
 def cadastro(request):
+    id = request.user.id
+    if id:
+        return redirect('home')
     status = request.GET.get('status')
     return render(request, 'cadastro.html', {'status': status})
 
