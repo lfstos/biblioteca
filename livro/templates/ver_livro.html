@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load filtros %}
 
 {% block 'title' %}Informações do livro{% endblock  %}
 
@@ -62,8 +63,10 @@
                         <th scope="row">{{ emprestimo.nome_emprestado }}</th>
                         <th scope="row">{{ emprestimo.nome_emprestado_anonimo }}</th>
                         <td>{{ emprestimo.data_emprestimo }}</td>
-                        <td>{{ emprestimo.data_devulocao }}</td>
-                        <td>{{ emprestimo.tempo_duracao }}</td>
+                        <td>{{ emprestimo.data_devolucao }}</td>
+                        <td>{{ emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }}</td>
+                        
+
                     </tr>
                 {% endfor %}
             </tbody>
