@@ -14,9 +14,10 @@
             </p>
                 <label>Autor:</label>
                 <input style="width: 40%" class="form-control" type="text" value="{{ livro.autor }}">
+                <br>
             <p>
                 <label>Co-autor:</label>
-                <input style="width: 40%" class="form-control" type="text" value="{{ livro.co_autor }}">
+                <input style="width: 40%" class="form-control" type="text" {% if livro.co_autor == none %} value="" {% else %} value="{{ livro.co_autor }}" {% endif %}>
             </p>
                 <label>Data:</label>
                 <input style="width: 40%" class="form-control" type="text" value="{{ livro.data_cadastro }}">
@@ -51,7 +52,6 @@
             <thead>
               <tr>
                 <th scope="col">Nome emprestado</th>
-                <th scope="col">Nome emprestado anônimo</th>
                 <th scope="col">Data empréstimo</th>
                 <th scope="col">Data devolução</th>
                 <th scope="col">Tempo duração</th>
@@ -60,12 +60,22 @@
             <tbody>
                 {% for emprestimo in emprestimos %}
                     <tr>
-                        <th scope="row">{{ emprestimo.nome_emprestado }}</th>
-                        <th scope="row">{{ emprestimo.nome_emprestado_anonimo }}</th>
+                        <th style="display: none;" scope="row">{{ emprestimo.nome_emprestado }}</th>
+                        <th style="display: none;" scope="row">{{ emprestimo.nome_emprestado_anonimo }}</th>
+                        {% if emprestimo.nome_emprestado != none %}
+                            <th style="display: block;" scope="row">{{ emprestimo.nome_emprestado }}</th>
+                        {% else %}
+                            <th style="display: block;" scope="row">{{ emprestimo.nome_emprestado_anonimo }}</th>
+                        {% endif %}
                         <td>{{ emprestimo.data_emprestimo }}</td>
                         <td>{{ emprestimo.data_devolucao }}</td>
-                        <td>{{ emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }}</td>
-                        
+                        <td> 
+                            {% if emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo == 1 %} 
+                                {{ emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }} dia
+                            {% else %}
+                            {{ emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }} dias
+                            {% endif %}
+                        </td>
 
                     </tr>
                 {% endfor %}
