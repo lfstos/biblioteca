@@ -1,7 +1,8 @@
 from django import forms
-from .models import Livros
+from .models import Livros, Categoria
 
 
+# class CadastroLivroForm(forms.ModelForm):
 class CadastroLivroForm(forms.ModelForm):
     class Meta:
         model = Livros
@@ -11,7 +12,12 @@ class CadastroLivroForm(forms.ModelForm):
             'autor': forms.TextInput(attrs={'class': 'form-control'}),
             'co_autor': forms.TextInput(attrs={'class': 'form-control'}),
             'categoria': forms.Select(attrs={'class': 'form-control'}),
-            'usuario': forms.Select(attrs={'class': 'form-control'}),
-            # 'usuario': forms.HiddenInput,
+            # 'usuario': forms.HiddenInput()
         }
-        exclude = ['emprestado']
+
+    def __init__(self, request, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields['usuario'].initial = request.user.id
+        self.fields['usuario'].widget = forms.HiddenInput()
+        self.fields['categoria'].queryset = Categoria.objects.filter(usuario=request.user.id)
+        print(self.fields['categoria'].widget)
