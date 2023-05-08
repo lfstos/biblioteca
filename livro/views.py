@@ -9,12 +9,11 @@ from django.http import HttpResponse
 def home(request):
     id = request.user.id
     livros = Livros.objects.filter(usuario=id)
-    form = CadastroLivroForm()
-    
+    form = CadastroLivroForm(request)
+    # form.fields['usuario'].initial = request.user.id
     context = {
         'livros': livros,
-        'form': form
-
+        'form': form,
     }
     return render(request, 'home.html', context)
 
@@ -40,9 +39,8 @@ def ver_livro(request, id):
 @login_required
 def cadastrar_livro(request):
     if request.method == 'POST':
-        form = CadastroLivroForm(request.POST)
+        form = CadastroLivroForm(request=request, data=request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
-        else:
-            return HttpResponse(form.errors)
+        return HttpResponse('não salvou')
