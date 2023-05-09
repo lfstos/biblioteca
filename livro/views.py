@@ -24,11 +24,13 @@ def ver_livro(request, id):
     usuario_id = request.user.id
     categorias = Categoria.objects.filter(usuario=usuario_id)
     emprestimos = Emprestimo.objects.filter(livro_id=id)
+    form = CadastroLivroForm(request)
     
     context = {
         'livro': livro,
         'categorias': categorias,
-        'emprestimos': emprestimos
+        'emprestimos': emprestimos,
+        'form': form
     }
     if request.user.id == livro.usuario.id:
         return render(request, 'ver_livro.html', context)
@@ -40,7 +42,19 @@ def ver_livro(request, id):
 def cadastrar_livro(request):
     if request.method == 'POST':
         form = CadastroLivroForm(request=request, data=request.POST)
+
         if form.is_valid():
+            # if form.cleaned_data['usuario'] == request.user.id:
+            print(form.cleaned_data['usuario'])
             form.save()
             return redirect('home')
+            # else:
+            #     return HttpResponse('Tentou salvar em outra conta de usuário')
         return HttpResponse('não salvou')
+    
+
+@login_required
+def excluir_livro(request, id):
+    livro = Livros.objects.get(id=id)
+    livro.delete()
+    return redirect('home')
