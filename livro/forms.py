@@ -20,4 +20,3 @@ class CadastroLivroForm(forms.ModelForm):
         self.fields['usuario'].initial = request.user.id
         self.fields['usuario'].widget = forms.HiddenInput()
         self.fields['categoria'].queryset = Categoria.objects.filter(usuario=request.user.id)
-        print(self.fields['categoria'].widget)
