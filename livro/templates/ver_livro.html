@@ -4,6 +4,26 @@
 {% block 'title' %}Informações do livro{% endblock  %}
 
 {% block 'content' %}
+
+{% comment %} Modal para exclusão de livro {% endcomment %}
+<div class="modal fade" id="excluirLivro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="excluirLivroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="excluirLivroLabel">Excluir</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Deseja mesmo excluir o livro {{ livro.nome }} ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <a href="{% url 'excluir_livro' livro.id %}" class="btn btn-danger">Excluir</a>
+        </div>
+      </div>
+    </div>
+</div>
+
 <div class='container'>
     <br>
         <form action="#" method="POST">
@@ -45,6 +65,7 @@
             </p>
             <br>
             <input class="form btn btn-success" type="submit" value="Salvar">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirLivro">Excluir</button>
         </form>
         <hr>
         <h1>Histórico de empréstimo</h1>
