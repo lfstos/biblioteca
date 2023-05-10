@@ -1,10 +1,15 @@
+{% load static %}
+
 <!doctype html>
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block 'title' %}{% endblock  %}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="{% static 'js/cadastros.js' %}"></script>
+
         {% block 'head' %}{% endblock  %}
     </head>
     <body>
@@ -27,14 +32,30 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                            <form action="{% url 'cadastrar_livro' %}" method="POST">
-                                {% csrf_token %}
-                                <table>
-                                    {{ form.as_table }}
-                                </table>
-                                <br>
-                                <input class="btn btn-success" type="submit" value='Cadastrar'>
-                            </form>
+
+                                <button onclick="mostrar_form(categoria)" id="categoria" class="btn btn-info">Categoria</button>
+                                <button onclick="mostrar_form(livro)" id="livro" class="btn btn-warning">Livro</button>
+                                <button onclick="mostrar_form(emprestimo)" id="emprestimo" class="btn btn-primary">Empréstimo</button>
+
+                                <div style="display: none;" id="livros">
+                                    <form action="{% url 'cadastrar_livro' %}" method="POST">
+                                        {% csrf_token %}
+                                        <br>
+                                        <table>
+                                            {{ form.as_table }}
+                                        </table>
+                                        <br>
+                                        <input class="btn btn-success" type="submit" value='Cadastrar'>
+                                    </form>
+                                </div>
+                                <div style="display: none;" id='categorias'>
+                                    <br>
+                                    Categoria
+                                </div>
+                                <div style="display: none;" id='emprestimos'>
+                                    <br>
+                                    Emprestimos
+                                </div>
                             </div>
                         </div>
                         </div>
@@ -43,7 +64,6 @@
             </div>
         </nav>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
         {% block 'content' %}{% endblock  %}
     </body>
 </html>
