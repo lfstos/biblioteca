@@ -4,41 +4,40 @@
 {% block 'title' %}Informações do livro{% endblock  %}
 
 {% block 'content' %}
-
-{% comment %} Modal para exclusão de livro {% endcomment %}
-<div class="modal fade" id="excluirLivro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="excluirLivroLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="excluirLivroLabel">Excluir</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="excluirLivro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="excluirLivroLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="excluirLivroLabel">Excluir</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            Deseja mesmo excluir o livro {{ livro.nome }} ?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <a href="{% url 'excluir_livro' livro.id %}" class="btn btn-danger">Excluir</a>
+            </div>
         </div>
-        <div class="modal-body">
-          Deseja mesmo excluir o livro {{ livro.nome }} ?
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <a href="{% url 'excluir_livro' livro.id %}" class="btn btn-danger">Excluir</a>
-        </div>
-      </div>
     </div>
-</div>
 
-<div class='container'>
-    <br>
+    <div class='container'>
+        <br>
         <form action="#" method="POST">
             {% csrf_token %}
             <p>
                 <label>Nome do livro:</label>
                 <input class="form-control" type="text" value="{{ livro.nome }}">
             </p>
+            <p>
                 <label>Autor:</label>
                 <input style="width: 40%" class="form-control" type="text" value="{{ livro.autor }}">
                 <br>
-            <p>
                 <label>Co-autor:</label>
                 <input style="width: 40%" class="form-control" type="text" {% if livro.co_autor == none %} value="" {% else %} value="{{ livro.co_autor }}" {% endif %}>
             </p>
+            <p>
                 <label>Data:</label>
                 <input style="width: 40%" class="form-control" type="text" value="{{ livro.data_cadastro }}">
             <br>
@@ -71,12 +70,12 @@
         <h1>Histórico de empréstimo</h1>
         <table class="table table-striped">
             <thead>
-              <tr>
-                <th scope="col">Nome emprestado</th>
-                <th scope="col">Data empréstimo</th>
-                <th scope="col">Data devolução</th>
-                <th scope="col">Tempo duração</th>
-              </tr>
+                <tr>
+                    <th scope="col">Nome emprestado</th>
+                    <th scope="col">Data empréstimo</th>
+                    <th scope="col">Data devolução</th>
+                    <th scope="col">Tempo duração</th>
+                </tr>
             </thead>
             <tbody>
                 {% for emprestimo in emprestimos %}
@@ -101,6 +100,6 @@
                     </tr>
                 {% endfor %}
             </tbody>
-          </table>
+        </table>
     </div>
 {% endblock  %}
