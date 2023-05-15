@@ -5,6 +5,11 @@
 {% block 'content' %}
     <div class="container">
         <br>
+        {% if status_categoria == '1' %}
+        <div class="alert alert-success" role="alert">
+            <center>Categoria cadastrada com sucesso.</center>
+          </div>
+        {% endif %}
         <div class='row'>
             {% for livro  in livros %} 
                 <div class='col-md'>
