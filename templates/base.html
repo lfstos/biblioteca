@@ -33,14 +33,13 @@
                             </div>
                             <div class="modal-body">
 
-                                <button onclick="mostrar_form(categoria)" id="categoria" class="btn btn-info">Categoria</button>
-                                <button onclick="mostrar_form(livro)" id="livro" class="btn btn-warning">Livro</button>
-                                <button onclick="mostrar_form(emprestimo)" id="emprestimo" class="btn btn-primary">Empréstimo</button>
+                                <button style="margin-left: 15px;" onclick="mostrar_form(categoria)" id="categoria" class="btn btn-info">Categoria</button>
+                                <button style="margin-left: 15px;" onclick="mostrar_form(livro)" id="livro" class="btn btn-warning">Livro</button>
+                                <button style="margin-left: 15px;" onclick="mostrar_form(emprestimo)" id="emprestimo" class="btn btn-primary">Empréstimo</button>
+                                <hr>
 
                                 <div style="display: none;" id="livros">
                                     <form action="{% url 'cadastrar_livro' %}" method="POST">
-                                        {% csrf_token %}
-                                        <br>
                                         <table>
                                             {{ form.as_table }}
                                         </table>
@@ -49,11 +48,17 @@
                                     </form>
                                 </div>
                                 <div style="display: none;" id='categorias'>
-                                    <br>
-                                    Categoria
+                                    <form action="{% url 'cadastrar_categoria' %}" method="POST">
+                                        {% csrf_token %}
+                                        <table>
+                                            {{ form_categoria.as_table }}
+                                            <input  type="hidden" name='usuario_id' value={{ request.user.id }}>
+                                        </table>
+                                        <br>
+                                        <input class="btn btn-success" type="submit" value="Cadastrar">
+                                    </form>
                                 </div>
                                 <div style="display: none;" id='emprestimos'>
-                                    <br>
                                     Emprestimos
                                 </div>
                             </div>
