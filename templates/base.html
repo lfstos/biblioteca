@@ -47,7 +47,7 @@
                                         <input class="btn btn-success" type="submit" value='Cadastrar'>
                                     </form>
                                 </div>
-                                <div style="display: none;" id='categorias'>
+                                <div style="display: none;" id='categorias'>                                    
                                     <form action="{% url 'cadastrar_categoria' %}" method="POST">
                                         {% csrf_token %}
                                         <table>
@@ -59,8 +59,32 @@
                                     </form>
                                 </div>
                                 <div style="display: none;" id='emprestimos'>
-                                    Emprestimos
-                                </div>
+                                    <button class="btn btn-success" onclick="exibi_input_emprestado(usuario_cadastrado)" id="usuario_cadastrado">Usuário cadastrado</button>
+                                    <button class="btn btn-dark" onclick="exibi_input_emprestado(usuario_novo)" id="usuario_novo">Usuário novo</button>
+                                    <br> 
+                                    <form id="form_emprestimo" style="display: none;" action="{% url 'cadastrar_emprestimo' %}" method="POST" >
+                                        {% csrf_token %}
+                                        <br>
+                                        <select class="form-select" id="nome_emprestado" style="display: none;" name="nome_emprestado">
+                                            {% for usuario in usuarios  %}
+                                                <option value="{{ usuario.id }}">{{ usuario.first_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input class="form-control" type="text" id="nome_emprestado_anonimo" style="display: none;" name='nome_emprestado_anonimo' placeholder="Digite o nome para quem emprestou...">
+                                        <br>
+                                        Livros:
+                                        <select class="form-select" name="livro_emprestado" id="livro_emprestado">
+                                            {% for livro in livros %}
+                                                {% if livro.emprestado == False %}
+                                                    <option value={{ livro.id }}>{{ livro.nome }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input type="hidden" value="{{ request.user.id }}" name='usuario_id' id='usuario_id'>
+                                        <input class="btn btn-success" type="submit" value="Emprestar">
+                                    </form>
                             </div>
                         </div>
                         </div>
