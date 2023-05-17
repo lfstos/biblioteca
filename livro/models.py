@@ -28,9 +28,16 @@ class Livros(models.Model):
 
 
 class Emprestimo(models.Model):
+    AVALIACAO_CHOICES = (
+        ('P', 'Péssimo'),
+        ('R', 'Ruim]'),
+        ('B', 'Bom'),
+        ('O', 'Ótimo')
+    )
     nome_emprestado = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
     nome_emprestado_anonimo = models.CharField(max_length=30, null=True, blank=True)
-    data_emprestimo = models.DateField(null=True, blank=True)
+    data_emprestimo = models.DateField(auto_now_add=True)
     data_devolucao = models.DateField(null=True, blank=True)
     tempo_duracao = models.DateField(null=True, blank=True)
     livro = models.ForeignKey(Livros, models.DO_NOTHING)
+    avaliacao = models.CharField(max_length=1, choices=AVALIACAO_CHOICES, null=True, blank=True)
