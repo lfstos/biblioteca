@@ -4,21 +4,37 @@ function mostrar_form(arg) {
     emprestimo = document.getElementById('emprestimos');
 
     if (arg == categoria) {
-        console.log('categoria');
         categoria.style.display = 'block';
         livro.style.display = 'none';
         emprestimo.style.display = 'none';
     }
     else if (arg == livro) {
-        console.log('livro')
         livro.style.display = 'block';
         emprestimo.style.display = 'none';
         categoria.style.display = 'none';
     }
     else if (arg == emprestimo) {
-        console.log('emprestimos')
         emprestimo.style.display = 'block';
         livro.style.display = 'none';
         categoria.style.display = 'none';
+    }
+}
+
+function   exibi_input_emprestado(arg) {
+    usuario_cadastrado = document.getElementById('usuario_cadastrado');
+    usuario_novo = document.getElementById('usuario_novo');
+    form_emprestimo = document.getElementById('form_emprestimo');
+    nome_emprestado = document.getElementById('nome_emprestado')
+    nome_emprestado_anonimo = document.getElementById('nome_emprestado_anonimo')
+
+    if (arg == usuario_cadastrado) {
+        form_emprestimo.style.display = 'block';
+        nome_emprestado.style.display = 'Block';
+        nome_emprestado_anonimo.style.display = 'none';
+    }
+    else if (arg == usuario_novo) {
+        form_emprestimo.style.display = 'block';
+        nome_emprestado.style.display = 'none';
+        nome_emprestado_anonimo.style.display = 'block';
     }
 }
