@@ -1,40 +1,54 @@
-function mostrar_form(arg) {
-    categoria = document.getElementById('categorias');
-    livro = document.getElementById('livros');
-    emprestimo = document.getElementById('emprestimos');
+function mostrar_elementos(elemento) {
+    elemento.style.display = 'block';
+}
 
-    if (arg == categoria) {
-        categoria.style.display = 'block';
-        livro.style.display = 'none';
-        emprestimo.style.display = 'none';
+function ocultar_elemento(elemento) {
+    elemento.style.display = 'none';
+}
+
+function mostrar_form(elemento_selecionado) {
+    categoria = document.getElementById("categorias");
+    livro = document.getElementById("livros");
+    emprestimo = document.getElementById("emprestimos");
+    devolucao = document.getElementById("devolucao");   
+    
+    ocultar_elemento(categoria);
+    ocultar_elemento(livro);
+    ocultar_elemento(emprestimo);
+    ocultar_elemento(devolucao);
+
+    if (elemento_selecionado == categoria) {
+        mostrar_elementos(categoria);
     }
-    else if (arg == livro) {
-        livro.style.display = 'block';
-        emprestimo.style.display = 'none';
-        categoria.style.display = 'none';
+    else if(elemento_selecionado == livro) {
+        mostrar_elementos(livro);
     }
-    else if (arg == emprestimo) {
-        emprestimo.style.display = 'block';
-        livro.style.display = 'none';
-        categoria.style.display = 'none';
+    else if(elemento_selecionado == emprestimo) {
+        mostrar_elementos(emprestimo);
+    }
+    else if(elemento_selecionado == devolucao) {
+        mostrar_elementos(devolucao);
     }
 }
 
-function   exibi_input_emprestado(arg) {
+function   exibir_input_emprestado(elemento) {
     usuario_cadastrado = document.getElementById('usuario_cadastrado');
-    usuario_novo = document.getElementById('usuario_novo');
+    usuario_anonimo = document.getElementById('usuario_anonimo');
+    usu_cadastrado = document.getElementById('usu_cadastrado');
+    usu_anonimo = document.getElementById('usu_anonimo');
     form_emprestimo = document.getElementById('form_emprestimo');
-    nome_emprestado = document.getElementById('nome_emprestado')
-    nome_emprestado_anonimo = document.getElementById('nome_emprestado_anonimo')
 
-    if (arg == usuario_cadastrado) {
-        form_emprestimo.style.display = 'block';
-        nome_emprestado.style.display = 'Block';
-        nome_emprestado_anonimo.style.display = 'none';
+    ocultar_elemento(usu_cadastrado);
+    ocultar_elemento(usu_anonimo);
+    ocultar_elemento(form_emprestimo);
+    
+    if (elemento == usuario_cadastrado) {
+        mostrar_elementos(form_emprestimo);
+        mostrar_elementos(usu_cadastrado);
     }
-    else if (arg == usuario_novo) {
-        form_emprestimo.style.display = 'block';
-        nome_emprestado.style.display = 'none';
-        nome_emprestado_anonimo.style.display = 'block';
+    else if (elemento == usuario_anonimo) {
+        console.log('usuario_anonimo');
+        mostrar_elementos(form_emprestimo);
+        mostrar_elementos(usu_anonimo);
     }
 }
