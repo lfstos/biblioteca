@@ -5,10 +5,23 @@
 {% block 'content' %}
     <div class="container">
         <br>
-        {% if status_categoria == '1' %}
-        <div class="alert alert-success" role="alert">
-            <center>Categoria cadastrada com sucesso.</center>
-          </div>
+        {% if status == '1' %}
+            <div class="alert alert-success" role="alert">
+                <center>Categoria cadastrada com sucesso.</center>
+            </div>
+        {% elif status == '2' %}    
+            <div class="alert alert-success" role="alert">
+                <center>Livro emprestado com sucesso.</center>
+            </div>
+        {% elif status == '3' %}
+            <div class="alert alert-danger" role="alert">
+                <center>Tentativa de burlar o sistema.</center>
+            </div>
+        {% elif status == '4' %}
+            <div class="alert alert-success" role="alert">
+                <center>Livro devolvido com sucesso.</center>
+            </div>
+
         {% endif %}
         <div class='row'>
             {% for livro  in livros %} 
