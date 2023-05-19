@@ -2,26 +2,33 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Livros, Categoria, Emprestimo, User
 from .forms import LivroForm, CategoriaForm
+from datetime import date
 from django.http import HttpResponse
 
 
 @login_required
 def home(request):
-    id = request.user.id
-    livros = Livros.objects.filter(usuario=id)
+    livros = Livros.objects.filter(usuario=request.user.id)
+    total_livros = livros.count()
     form = LivroForm(request)
     form_categoria = CategoriaForm()
-    status_categoria = request.GET.get('cadastrar_categoria')
+    status = request.GET.get('status')
     usuarios = User.objects.all()
     # emprestimos = Emprestimo.objects.all()
     # form.fields['usuario'].initial = request.user.id
+    livros_disponiveis = Livros.objects.filter(usuario=request.user).filter(emprestado=False)
+    livros_emprestados = Livros.objects.filter(usuario=request.user).filter(emprestado=True)
+
     context = {
         'livros': livros,
         'form': form,
         'form_categoria': form_categoria,
-        'status_categoria': status_categoria,
+        'status': status,
         'usuarios': usuarios,
-        # 'emprestimos': emprestimos
+        'total_livros': total_livros,
+        'livros_emprestados': livros_emprestados,
+        'usuario_id': request.user.id,
+        'livros_disponiveis': livros_disponiveis
     }
     return render(request, 'home.html', context)
 
@@ -36,6 +43,8 @@ def ver_livro(request, id):
     form_categoria = CategoriaForm()
     usuarios = User.objects.all()
     livros = Livros.objects.all()
+    livros_disponiveis = Livros.objects.filter(usuario_id=usuario_id)
+    livros_emprestados = Livros.objects.filter(usuario=request.user).filter(emprestado=True)
     context = {
         'livro': livro,
         'categorias': categorias,
@@ -43,7 +52,9 @@ def ver_livro(request, id):
         'form': form,
         'form_categoria': form_categoria,
         'usuarios': usuarios,
-        'livros': livros
+        'livros': livros,
+        'livros_emprestados': livros_emprestados,
+        'livros_disponiveis': livros_disponiveis
     }
     if request.user.id == livro.usuario.id:
         return render(request, 'ver_livro.html', context)
@@ -81,7 +92,7 @@ def cadastrar_categoria(request):
         # usuario = User.objects.get(id=request.user.id)
         # Categoria(nome=nome, descricao=descricao, usuario=usuario).save()
         Categoria(nome=nome, descricao=descricao, usuario_id=usuario_id).save()
-        return redirect('/livro/home?cadastrar_categoria=1')
+        return redirect('/livro/home?status=1')
     else:
         return HttpResponse('Errooooo')
 
@@ -91,28 +102,38 @@ def cadastrar_emprestimo(request):
     if request.method == 'POST':
         usuario_id = request.POST.get('usuario_id')
         if request.user.is_authenticated and int(usuario_id) == int(request.user.id):
-            nome_emprestado = request.POST.get('nome_emprestado')
-            nome_emprestado_anonimo = request.POST.get(
-                'nome_emprestado_anonimo')
+            usuario_cadastrado = request.POST.get('usu_cadastrado')
+            usuario_anonimo = request.POST.get('usu_anonimo')
             livro_emprestado = request.POST.get('livro_emprestado')
 
             livro = Livros.objects.get(id=livro_emprestado)
             livro.emprestado = True
             livro.save()
 
-            if nome_emprestado_anonimo:
-                emprestimo = Emprestimo(
-                    nome_emprestado_anonimo=nome_emprestado_anonimo,
-                    livro_id=livro_emprestado,
-
-                )
+            if usuario_anonimo:
+                emprestimo = Emprestimo(nome_emprestado_anonimo=usuario_anonimo, livro_id=livro_emprestado)
                 emprestimo.save()
             else:
-                emprestimo = Emprestimo(
-                    nome_emprestado_id=nome_emprestado,
-                    livro_id=livro_emprestado,
-                )
+                emprestimo = Emprestimo(nome_emprestado_id=usuario_cadastrado, livro_id=livro_emprestado)
                 emprestimo.save()
-            return HttpResponse(f'Empréstimo realizado com sucesso')
+            return redirect('/livro/home?status=2')
         else:
-            return HttpResponse(f'TEntou burlar o sistema né malandrão!')
+            return redirect('/livro/home?status=3')
+
+
+@login_required
+def devolver_livro(request):
+    if request.method == 'POST':
+        usuario_id = request.POST.get('usuario_id')
+        if request.user.is_authenticated and int(usuario_id) == int(request.user.id):
+            livro_id = request.POST.get('livro_emprestado_id')
+            livro = Livros.objects.get(id=livro_id)
+            livro.emprestado = False
+            livro.save()
+
+            # emprestimo = Emprestimo.objects.filter(livro_id=livro_id).filter(data_devolucao=None)
+            emprestimo = Emprestimo.objects.get(livro_id=livro_id)
+            emprestimo.data_devolucao = date.today()
+            emprestimo.save()
+
+            return redirect('/livro/home?status=4')
