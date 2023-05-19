@@ -1,10 +1,14 @@
 from django import template
+from datetime import date
+
 
 register = template.Library()
 
 
 @register.filter
 def mostra_duracao(data_emprestimo, data_devolucao):
-    # val1 = datetime.strptime(data_emprestimo, '%Y-%m-%d')
-    # val2 = datetime.strptime(data_devolucao, '%Y-%m-%d')
-    return (data_emprestimo - data_devolucao).days
+    if isinstance(data_emprestimo, date) and isinstance(data_devolucao, date):
+        dia = (data_devolucao - data_emprestimo).days
+        if dia == 1:
+            return f'{dia} dia'
+        return f'{dia} dias'
