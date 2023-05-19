@@ -17,13 +17,23 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'home' %}">Home</a>
                 {% if request.user.id %}
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Cadastrar</button>
-                    <a style="color: red;" href="{% url 'sair' %}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                            <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-                        </svg>
-                    </a>
+
+                    <div class="btn-group">
+                        <div class="btn-group dropstart" role="group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropstart</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Cadastrar</button>
+                            <a class="dropdown-item" href="{% url 'sair' %}">Sair</a>
+                            <hr class="dropdown-divider">
+                            <a class="dropdown-item">Total de livros cadastrados: {{ total_livros }}</a>
+                        </ul>
+                        </div>
+                        <button type="button" class="btn btn-secondary">
+                            Menu
+                        </button>
+                    </div>
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
@@ -32,12 +42,11 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-
                                 <button style="margin-left: 15px;" onclick="mostrar_form(categoria)" id="categoria" class="btn btn-info">Categoria</button>
                                 <button style="margin-left: 15px;" onclick="mostrar_form(livro)" id="livro" class="btn btn-warning">Livro</button>
                                 <button style="margin-left: 15px;" onclick="mostrar_form(emprestimo)" id="emprestimo" class="btn btn-primary">Empréstimo</button>
+                                <button style="margin-left: 15px;" onclick="mostrar_form(devolucao)" id="devolver" class="btn btn-danger">Devolução</button>
                                 <hr>
-
                                 <div style="display: none;" id="livros">
                                     <form action="{% url 'cadastrar_livro' %}" method="POST">
                                         <table>
@@ -59,23 +68,22 @@
                                     </form>
                                 </div>
                                 <div style="display: none;" id='emprestimos'>
-                                    <button class="btn btn-success" onclick="exibi_input_emprestado(usuario_cadastrado)" id="usuario_cadastrado">Usuário cadastrado</button>
-                                    <button class="btn btn-dark" onclick="exibi_input_emprestado(usuario_novo)" id="usuario_novo">Usuário novo</button>
+                                    <button class="btn btn-success" onclick="exibir_input_emprestado(usuario_cadastrado)" id="usuario_cadastrado">Usuário cadastrado</button>
+                                    <button class="btn btn-dark" onclick="exibir_input_emprestado(usuario_anonimo)" id="usuario_anonimo">Usuário novo</button>
                                     <br> 
                                     <form id="form_emprestimo" style="display: none;" action="{% url 'cadastrar_emprestimo' %}" method="POST" >
                                         {% csrf_token %}
                                         <br>
-                                        <select class="form-select" id="nome_emprestado" style="display: none;" name="nome_emprestado">
+                                        <select class="form-select" id="usu_cadastrado" style="display: none;" name="usu_cadastrado">
                                             {% for usuario in usuarios  %}
                                                 <option value="{{ usuario.id }}">{{ usuario.first_name }}</option>
                                             {% endfor %}
                                         </select>
-                                        <br>
-                                        <input class="form-control" type="text" id="nome_emprestado_anonimo" style="display: none;" name='nome_emprestado_anonimo' placeholder="Digite o nome para quem emprestou...">
+                                        <input class="form-control" type="text" id="usu_anonimo" style="display: none;" name='usu_anonimo' placeholder="Digite o nome para quem emprestou...">
                                         <br>
                                         Livros:
                                         <select class="form-select" name="livro_emprestado" id="livro_emprestado">
-                                            {% for livro in livros %}
+                                            {% for livro in livros_disponiveis %}
                                                 {% if livro.emprestado == False %}
                                                     <option value={{ livro.id }}>{{ livro.nome }}</option>
                                                 {% endif %}
@@ -85,8 +93,21 @@
                                         <input type="hidden" value="{{ request.user.id }}" name='usuario_id' id='usuario_id'>
                                         <input class="btn btn-success" type="submit" value="Emprestar">
                                     </form>
+                                </div>
+                                <div style="display: none;" id="devolucao">
+                                    <form action="{% url 'devolver_livro' %}" method="POST">
+                                        {% csrf_token %}
+                                        <select class="form-select" id="livro_emprestado_id" name="livro_emprestado_id">
+                                            {% for livro in livros_emprestados %}
+                                                <option value={{ livro.id}}>{{ livro.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input type="hidden" value="{{ usuario_id }}" id="usuario_id" name="usuario_id">
+                                        <input type="submit" class="btn btn-danger" value="Devolver">
+                                    </form>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 {% endif %}
