@@ -88,14 +88,21 @@
                             <th style="display: block;" scope="row">{{ emprestimo.nome_emprestado_anonimo }}</th>
                         {% endif %}
                         <td>{{ emprestimo.data_emprestimo }}</td>
-                        <td>{{ emprestimo.data_devolucao }}</td>
+                        
+                        {% if emprestimo.data_devolucao %}
+                            <td>{{ emprestimo.data_devolucao }}</td>
+                        {% else %}
+                            <td>Ainda não devolvido </td>
+                        {% endif %}                        
                         <td> 
-                            {% if emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo == 1 %} 
-                                {{ emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }} dia
+                        {% if  emprestimo.data_emprestimo and emprestimo.data_devolucao%}
+                            {{ emprestimo.data_emprestimo|mostra_duracao:emprestimo.data_devolucao }}
                             {% else %}
-                            {{ emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }} dias
-                            {% endif %}
+                            <td></td>
+                        {% endif %}
                         </td>
+
+
 
                     </tr>
                 {% endfor %}
