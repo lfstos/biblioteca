@@ -21,38 +21,25 @@
         </div>
         </div>
     </div>
-
     <div class='container'>
         <br>
-        <form action="#" method="POST">
+        <form action="{% url 'alterar_livro' %}" method="POST">
             {% csrf_token %}
             <p>
                 <label>Nome do livro:</label>
-                <input class="form-control" type="text" value="{{ livro.nome }}">
+                <input class="form-control" type="text" value="{{ livro.nome }}" name="nome">
             </p>
             <p>
                 <label>Autor:</label>
-                <input style="width: 40%" class="form-control" type="text" value="{{ livro.autor }}">
+                <input style="width: 40%" class="form-control" type="text" value="{{ livro.autor }}" name="autor">
                 <br>
                 <label>Co-autor:</label>
-                <input style="width: 40%" class="form-control" type="text" {% if livro.co_autor == none %} value="" {% else %} value="{{ livro.co_autor }}" {% endif %}>
+                <input style="width: 40%" class="form-control" type="text" name="co_autor" {% if livro.co_autor == none %} value="" {% else %} value="{{ livro.co_autor }}" {% endif %}>
             </p>
-            <p>
-                <label>Data:</label>
-                <input style="width: 40%" class="form-control" type="text" value="{{ livro.data_cadastro }}">
-            <br>
-            <p>
-                <label>Emprestado &nbsp; &nbsp;</label>
-                {% if livro.emprestado %}
-                    <input style="transform : scale(2.0);" type="checkbox" checked name="emprestado">
-                {% else %}
-                    <input style="transform : scale(2.0);" type="checkbox" name="emprestado">
-                {% endif %}
-            </p>
-            <br>
             <p>
                 <label style="display: inline;">Categoria:</label>
-                <select style="width: 20%; display: inline;" class="form-select" name="categoria">
+                <br>
+                <select style="width: 20%; display: inline;" class="form-select" name="categoria_id">
                     {% for  categoria  in categorias %}
                         {% if livro.categoria == categoria %}
                             <option value="{{ categoria.id }}" selected>{{ categoria }}</option>
@@ -62,7 +49,31 @@
                     {% endfor %}
                 </select>
             </p>
+            <p>
+                <label>Data:</label>
+                <br>
+                {{ livro.data_cadastro }}"
+            </p>
+            <p>
+                <label>Emprestado</label>
+                {% if livro.emprestado %}
+                    <svg style="color: green; display: inline;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                    </svg>
+                {% else %}
+                    <svg style="display: inline; color: red;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                {% endif %}
+            </p>
             <br>
+            <br>
+            
+            
+            <input type="hidden" value="{{ livro.id }}" id="livro_id" name="livro_id">
+            <input type="hidden" value="{{request.user.id}}" id="usuario_id" name="usuario_id">
+
+
             <input class="form btn btn-success" type="submit" value="Salvar">
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirLivro">Excluir</button>
         </form>
@@ -101,12 +112,9 @@
                             <td></td>
                         {% endif %}
                         </td>
-
-
-
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-{% endblock  %}
+{% endblock %}
