@@ -24,7 +24,8 @@
                             <span class="visually-hidden">Toggle Dropstart</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Cadastrar</button>
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Opções</button>
+                            <a class="dropdown-item" href="{% url 'seus_emprestimos' %}">Seus emprestimos</a>
                             <a class="dropdown-item" href="{% url 'sair' %}">Sair</a>
                             <hr class="dropdown-divider">
                             <a class="dropdown-item">Total de livros cadastrados: {{ total_livros }}</a>
@@ -38,7 +39,7 @@
                         <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModal">Cadastrar</h5>
+                            <h5 class="modal-title" id="exampleModal">Cadastrar / Emprestar / Devolver</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -103,7 +104,7 @@
                                             {% endfor %}
                                         </select>
                                         <br>
-                                        <input type="hidden" value="{{ usuario_id }}" id="usuario_id" name="usuario_id">
+                                        <input type="hidden" value="{{ usuario_id }}" name="usuario_id">
                                         <input type="submit" class="btn btn-danger" value="Devolver">
                                     </form>
                                 </div>
