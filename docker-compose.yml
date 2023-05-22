@@ -3,15 +3,25 @@ version: '2'
 services:
   db:
     image: postgres
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=biblioteca
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
-    driver: local
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+    environment: 
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: biblioteca
+  
+  web:
+    build: .
+    restart: always
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=True
+    command: bash -c "pip install psycopg2-binary && python manage.py runserver 0.0.0.0:8000"
