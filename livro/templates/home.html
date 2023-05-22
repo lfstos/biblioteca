@@ -13,13 +13,13 @@
             <div class="alert alert-success" role="alert">
                 <center>Livro emprestado com sucesso.</center>
             </div>
-        {% elif status == '3' %}
-            <div class="alert alert-danger" role="alert">
-                <center>Tentativa de burlar o sistema.</center>
-            </div>
         {% elif status == '4' %}
             <div class="alert alert-success" role="alert">
                 <center>Livro devolvido com sucesso.</center>
+            </div>
+        {% elif status == '5' %}
+            <div class="alert alert-success" role="alert">
+                <center>Livro alterado com sucesso.</center>
             </div>
 
         {% endif %}
